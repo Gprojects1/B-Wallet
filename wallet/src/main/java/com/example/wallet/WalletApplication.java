@@ -11,3 +11,4 @@ public class WalletApplication {
 	}
 
 }
+//processQRCode
