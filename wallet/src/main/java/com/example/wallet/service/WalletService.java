@@ -1,12 +1,13 @@
 package com.example.wallet.service;
 
-import com.example.wallet.dto.QRCodeData;
-import com.example.wallet.exception.customException.client.InvalidInteraction;
+import com.example.wallet.dto.response.BalanceResponseDTO;
+import com.example.wallet.dto.response.TransactionHistoryResponseDTO;
 import com.example.wallet.model.entity.Tranche;
 import com.example.wallet.repository.sql.WalletRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -17,16 +18,15 @@ public class WalletService {
     private final QRCodeService qrCodeService;
 
 
-    @Transactional
-    public Tranche processQRCode(Long senderId, String qrCodeId) {
-
-        QRCodeData qrData = qrCodeService.validateQRCode(qrCodeId);
-        if(qrData.getUserId().equals(senderId)) {
-            throw new InvalidInteraction("you cant scan your own QR!");
-        }
-
+    public BalanceResponseDTO getBalance(String userId) {
         return null;
     }
 
+    public TransactionHistoryResponseDTO getTransactionHistory(Long id, LocalDate startDate, LocalDate endDate) {
+        return null;
+    }
 
+    public Tranche getTransactionInfo(String userId, Long trancheId) {
+        return null;
+    }
 }

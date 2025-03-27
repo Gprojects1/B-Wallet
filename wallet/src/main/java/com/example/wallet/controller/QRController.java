@@ -3,6 +3,7 @@ package com.example.wallet.controller;
 import com.example.wallet.dto.request.QRGenerationRequestDTO;
 import com.example.wallet.dto.response.QRGeneratedResponseDTO;
 import com.example.wallet.model.entity.Tranche;
+import com.example.wallet.service.PaymentService;
 import com.example.wallet.service.QRCodeService;
 import com.example.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import java.math.BigDecimal;
 @RequestMapping("/qr")
 public class QRController {
 
-    private final WalletService walletService;
     private final QRCodeService qrCodeService;
 
     @PostMapping("/generate")
@@ -28,16 +28,6 @@ public class QRController {
         return ResponseEntity.ok()
                 .header("Content-Type", "image/png")
                 .body(qrCodeImage);
-    }
-
-    @PostMapping("/scan")
-    public ResponseEntity<Tranche> scanQR(@RequestHeader("X-User-Id") String id,
-                                          @RequestParam String qrCodeId
-    ) {
-        Long userId = Long.parseLong(id);
-        Tranche tranche = walletService.processQRCode(userId, qrCodeId);
-        return ResponseEntity.ok(tranche);
-        //return ResponseEntity.ok(null);
     }
 
 }
