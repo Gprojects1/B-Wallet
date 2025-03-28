@@ -2,6 +2,8 @@ package com.example.wallet.exception;
 
 import com.example.wallet.exception.customException.client.InvalidDataException;
 import com.example.wallet.exception.customException.client.InvalidInteraction;
+import com.example.wallet.exception.customException.service.TrancheNotFoundException;
+import com.example.wallet.exception.customException.service.WalletNotFoundException;
 import com.example.wallet.exception.customException.system.QRGenerationException;
 import com.example.wallet.exception.customException.system.QRValidationException;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class WalletServiceExceptionHandler {
+
+    @ExceptionHandler(WalletNotFoundException.class)
+    public ResponseEntity<String> handleWalletNotFound(WalletNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(TrancheNotFoundException.class)
+    public ResponseEntity<String> handleTrancheNotFound(TrancheNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 
     @ExceptionHandler(InvalidInteraction.class)
     public ResponseEntity<String> handleInvalidInteraction(InvalidInteraction ex) {
@@ -26,11 +38,6 @@ public class WalletServiceExceptionHandler {
     public ResponseEntity<String> handleQRGeneration(QRGenerationException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
-
-//    @ExceptionHandler(QRParsingException.class)
-//    public ResponseEntity<String> handleQRParsing(QRParsingException ex) {
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-//    }
 
     @ExceptionHandler(QRValidationException.class)
     public ResponseEntity<String> handleQRValidation(QRValidationException ex) {

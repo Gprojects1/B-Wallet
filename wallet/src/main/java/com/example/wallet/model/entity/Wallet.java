@@ -24,7 +24,7 @@ public class Wallet {
     private Long userId;
 
     @Column(nullable = false)
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @Column(nullable = false)
     private Currency currency;

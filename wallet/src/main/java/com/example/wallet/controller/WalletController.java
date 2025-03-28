@@ -5,6 +5,7 @@ import com.example.wallet.dto.response.TransactionHistoryResponseDTO;
 import com.example.wallet.model.entity.Tranche;
 import com.example.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class WalletController {
                                                            @RequestHeader(value = "X-User-Roles") String roles
     ) {
         Long id = Long.parseLong(userId);
-        BalanceResponseDTO response = walletService.getBalance(userId);
+        BalanceResponseDTO response = walletService.getBalance(id);
         return ResponseEntity.ok(response);
     }
 
@@ -33,7 +34,9 @@ public class WalletController {
     ) {
         Long id = Long.parseLong(userId);
         TransactionHistoryResponseDTO response = walletService.getTransactionHistory(id,startDate,endDate);
-        return ResponseEntity.ok(response);
+        return response.getTranches().isEmpty() ?
+                new ResponseEntity("no transactions found", HttpStatus.NO_CONTENT) :
+                ResponseEntity.ok(response);
     }
 
     @GetMapping("/transaction/{trancheId}")
@@ -41,7 +44,7 @@ public class WalletController {
                                                       @PathVariable("trancheId") Long trancheId)
     {
         Long id = Long.parseLong(userId);
-        Tranche response = walletService.getTransactionInfo(userId,trancheId);
+        Tranche response = walletService.getTransactionInfo(id,trancheId);
         return ResponseEntity.ok(response);
     }
 }
