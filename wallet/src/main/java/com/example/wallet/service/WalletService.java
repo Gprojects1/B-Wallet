@@ -20,12 +20,10 @@ public class WalletService {
     private final WalletRepository walletRepository;
     private final TrancheService trancheService;
 
-    
+
     public BalanceResponseDTO getBalance(Long userId) {
 
-        Wallet wallet = walletRepository.findByUserId(userId).orElseThrow(
-                () -> new WalletNotFoundException("wallet not found id: " + userId)
-        );
+        Wallet wallet = getWallet(userId);
 
         return BalanceResponseDTO.builder()
                 .balance(wallet.getBalance())
@@ -49,5 +47,14 @@ public class WalletService {
 
     public Tranche getTransactionInfo(Long userId, Long trancheId) {
         return trancheService.findTranche(userId, trancheId);
+    }
+
+    public Wallet getWallet(Long userId){
+        return walletRepository.findByUserId(userId)
+                .orElseThrow(() -> new WalletNotFoundException("wallet not found id: " + userId));
+    }
+
+    public Wallet setWallet(Wallet wallet) {
+        return walletRepository.save(wallet);
     }
 }

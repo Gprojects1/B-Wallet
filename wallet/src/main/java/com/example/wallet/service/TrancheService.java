@@ -24,4 +24,8 @@ public class TrancheService {
         return trancheRepository.findByUserIdAndTrancheId(userId,trancheId)
                 .orElseThrow(() -> new TrancheNotFoundException("tranche not found, id:" + trancheId));
     }
+
+    public Tranche createTranche(Tranche tranche) {
+        return trancheRepository.save(tranche);
+    }
 }

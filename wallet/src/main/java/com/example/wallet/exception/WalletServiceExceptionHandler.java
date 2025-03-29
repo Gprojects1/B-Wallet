@@ -1,7 +1,7 @@
 package com.example.wallet.exception;
 
 import com.example.wallet.exception.customException.client.InvalidDataException;
-import com.example.wallet.exception.customException.client.InvalidInteraction;
+import com.example.wallet.exception.customException.client.InvalidInteractionException;
 import com.example.wallet.exception.customException.service.TrancheNotFoundException;
 import com.example.wallet.exception.customException.service.WalletNotFoundException;
 import com.example.wallet.exception.customException.system.QRGenerationException;
@@ -24,8 +24,8 @@ public class WalletServiceExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
-    @ExceptionHandler(InvalidInteraction.class)
-    public ResponseEntity<String> handleInvalidInteraction(InvalidInteraction ex) {
+    @ExceptionHandler(InvalidInteractionException.class)
+    public ResponseEntity<String> handleInvalidInteraction(InvalidInteractionException ex) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(ex.getMessage());
     }
 

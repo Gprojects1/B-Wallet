@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -41,5 +42,5 @@ public class Tranche {
     private TrancheType type;
 
     @Column(name = "created_at", nullable = false)
-    private Long createdAt;
+    private LocalDate createdAt;
 }

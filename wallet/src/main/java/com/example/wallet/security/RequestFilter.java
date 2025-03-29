@@ -25,13 +25,6 @@ public class RequestFilter extends OncePerRequestFilter {
 
         String userId = request.getHeader("X-User-Id");
 
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            String headerValue = request.getHeader(headerName);
-            System.out.println("Header: " + headerName + " = " + headerValue);
-        }
-
         if(userId == null || userId.isEmpty()) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             System.out.println("unora");
