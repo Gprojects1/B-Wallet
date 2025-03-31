@@ -1,11 +1,9 @@
 package com.example.wallet.kafka.events.consume;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class UserCreatedEvent {
+public class ProfileDeletedEvent {
     private Long userId;
     private String email;
-    private String role;
 }

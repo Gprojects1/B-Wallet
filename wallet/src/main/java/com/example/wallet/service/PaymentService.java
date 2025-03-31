@@ -47,7 +47,6 @@ public class PaymentService {
                 .receiverId(transferRequest.getReceiverId())
                 .amount(transferRequest.getAmount())
                 .createdAt(LocalDate.now())
-                .currency(transferRequest.getCurrency())
                 .status(TrancheStatus.PENDING)
                 .type(TrancheType.TRANSFER)
                 .build();
@@ -85,7 +84,6 @@ public class PaymentService {
                 .receiverId(qrData.getUserId())
                 .amount(qrData.getAmount())
                 .createdAt(LocalDate.now())
-                .currency(qrData.getCurrency())
                 .status(TrancheStatus.PENDING)
                 .type(TrancheType.TRANSFER)
                 .build();

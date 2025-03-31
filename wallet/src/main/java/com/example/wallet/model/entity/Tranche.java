@@ -1,6 +1,5 @@
 package com.example.wallet.model.entity;
 
-import com.example.wallet.model.type.Currency;
 import com.example.wallet.model.type.TrancheStatus;
 import com.example.wallet.model.type.TrancheType;
 import jakarta.persistence.*;
@@ -31,9 +30,6 @@ public class Tranche {
 
     @Column(nullable = false)
     private BigDecimal amount;
-
-    @Column(nullable = false)
-    private Currency currency;
 
     @Column(nullable = false)
     private TrancheStatus status;

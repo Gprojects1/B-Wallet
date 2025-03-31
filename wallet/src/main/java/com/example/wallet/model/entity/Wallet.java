@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -26,12 +28,9 @@ public class Wallet {
     @Column(nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
 
-    @Column(nullable = false)
-    private Currency currency;
-
     @Column(name = "created_at", nullable = false)
-    private Long createdAt;
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
-    private Long updatedAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

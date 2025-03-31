@@ -6,6 +6,7 @@ import com.example.wallet.exception.customException.service.WalletNotFoundExcept
 import com.example.wallet.model.entity.Tranche;
 import com.example.wallet.model.entity.Wallet;
 import com.example.wallet.repository.sql.WalletRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +22,17 @@ public class WalletService {
     private final TrancheService trancheService;
 
 
+    @Transactional
     public BalanceResponseDTO getBalance(Long userId) {
 
         Wallet wallet = getWallet(userId);
 
         return BalanceResponseDTO.builder()
                 .balance(wallet.getBalance())
-                .currency(wallet.getCurrency())
                 .build();
     }
 
+    @Transactional
     public TransactionHistoryResponseDTO getTransactionHistory(Long id, LocalDate startDate, LocalDate endDate) {
 
         List<Tranche> tranches = trancheService.findTranchesByPeriod(startDate,endDate);
@@ -49,12 +51,19 @@ public class WalletService {
         return trancheService.findTranche(userId, trancheId);
     }
 
+    @Transactional
     public Wallet getWallet(Long userId){
         return walletRepository.findByUserId(userId)
                 .orElseThrow(() -> new WalletNotFoundException("wallet not found id: " + userId));
     }
 
+    @Transactional
     public Wallet setWallet(Wallet wallet) {
         return walletRepository.save(wallet);
+    }
+
+    @Transactional
+    public void deleteWallet(Long userId) {
+        walletRepository.deleteByUserId(userId);
     }
 }
