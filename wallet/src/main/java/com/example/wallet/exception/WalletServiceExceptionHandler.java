@@ -1,5 +1,6 @@
 package com.example.wallet.exception;
 
+import com.example.wallet.exception.customException.client.FraudDetectedException;
 import com.example.wallet.exception.customException.client.InvalidDataException;
 import com.example.wallet.exception.customException.client.InvalidInteractionException;
 import com.example.wallet.exception.customException.service.TrancheNotFoundException;
@@ -34,6 +35,12 @@ public class WalletServiceExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(FraudDetectedException.class)
+    public ResponseEntity<String> handleFraud(FraudDetectedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ex.getMessage());
+    }
+
     @ExceptionHandler(QRGenerationException.class)
     public ResponseEntity<String> handleQRGeneration(QRGenerationException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
@@ -41,7 +48,7 @@ public class WalletServiceExceptionHandler {
 
     @ExceptionHandler(QRValidationException.class)
     public ResponseEntity<String> handleQRValidation(QRValidationException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

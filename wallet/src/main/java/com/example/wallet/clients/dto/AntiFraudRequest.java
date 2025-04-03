@@ -1,6 +1,6 @@
 package com.example.wallet.clients.dto;
 
-import com.example.wallet.model.type.Currency;
+import com.example.wallet.model.type.CryptoCurrency;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,5 @@ public class AntiFraudRequest {
     private Long senderId;
     private Long receiverId;
     private BigDecimal amount;
-    private Currency currency;
+    private CryptoCurrency currency;
 }
