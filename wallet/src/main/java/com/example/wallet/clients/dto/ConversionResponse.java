@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DonateConversionRequest {
-    private Long userId;
-    private BigDecimal sourceAmount;
-    private CryptoCurrency sourceCurrency;
+public class ConversionResponse {
+    private BigDecimal convertedAmount;
+    private Long conversionId;
 }

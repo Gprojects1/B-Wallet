@@ -21,7 +21,9 @@ import java.util.UUID;
 public class QRCodeService {
 
     private final QRCodeGenerator qrCodeGenerator;
+
     private final QRRedisRepository redisRepository;
+
     private static final long QR_TTL_SEC = 300;
 
     public QRGeneratedResponseDTO generateQRCode(Long userId, BigDecimal amount) {

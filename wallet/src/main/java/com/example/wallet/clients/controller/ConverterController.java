@@ -1,9 +1,7 @@
 package com.example.wallet.clients.controller;
 
-import com.example.wallet.clients.dto.DonateConversionRequest;
-import com.example.wallet.clients.dto.DonateConversionResponse;
-import com.example.wallet.clients.dto.WithdrawConversionRequest;
-import com.example.wallet.clients.dto.WithdrawConversionResponse;
+import com.example.wallet.clients.dto.ConversionRequest;
+import com.example.wallet.clients.dto.ConversionResponse;
 import com.example.wallet.clients.service.ConverterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +15,20 @@ public class ConverterController {
     private final ConverterService converterService;
 
     @PostMapping("/in")
-    public ResponseEntity<DonateConversionResponse> donate(@RequestBody DonateConversionRequest request,
-                                                           @RequestHeader("X-User-Id") String userId
+    public ResponseEntity<ConversionResponse> donate(@RequestBody ConversionRequest request,
+                                                     @RequestHeader("X-User-Id") String userId
     ) {
         Long id = Long.parseLong(userId);
-        DonateConversionResponse response = converterService.processDonateConversion(request,id);
+        ConversionResponse response = converterService.processConversion(request,id);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/out")
-    public ResponseEntity<WithdrawConversionResponse> withdraw(@RequestBody WithdrawConversionRequest request,
-                                                               @RequestHeader("X-User-Id") String userId
+    public ResponseEntity<ConversionResponse> withdraw(@RequestBody ConversionRequest request,
+                                                       @RequestHeader("X-User-Id") String userId
     ) {
         Long id = Long.parseLong(userId);
-        WithdrawConversionResponse response = converterService.processWithdrawConversion(request,id);
+        ConversionResponse response = converterService.processConversion(request,id);
         return ResponseEntity.ok(response);
     }
 }

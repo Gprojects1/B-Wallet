@@ -4,7 +4,6 @@ import com.example.wallet.exception.customException.service.TrancheNotFoundExcep
 import com.example.wallet.model.entity.Tranche;
 import com.example.wallet.repository.sql.TrancheRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,7 +24,7 @@ public class TrancheService {
                 .orElseThrow(() -> new TrancheNotFoundException("tranche not found, id:" + trancheId));
     }
 
-    public Tranche createTranche(Tranche tranche) {
+    public Tranche saveTranche(Tranche tranche) {
         return trancheRepository.save(tranche);
     }
 }

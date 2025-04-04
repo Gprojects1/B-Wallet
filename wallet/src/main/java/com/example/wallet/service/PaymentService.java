@@ -1,8 +1,10 @@
 package com.example.wallet.service;
 
+import com.example.wallet.clients.service.AntiFraudService;
 import com.example.wallet.dto.QRCodeData;
 import com.example.wallet.dto.request.TransferRequestDTO;
 import com.example.wallet.exception.customException.client.InvalidInteractionException;
+import com.example.wallet.kafka.service.KafkaTransactionProducerService;
 import com.example.wallet.model.entity.Tranche;
 import com.example.wallet.model.entity.Wallet;
 import com.example.wallet.model.type.TrancheStatus;
@@ -20,6 +22,8 @@ public class PaymentService {
     private final QRCodeService qrCodeService;
     private final WalletService walletService;
     private final TrancheService trancheService;
+    private final AntiFraudService antiFraudService;
+    private final KafkaTransactionProducerService kafkaService;
 
     @Transactional
     public Tranche transfer(Long senderId, TransferRequestDTO transferRequest) {
@@ -52,7 +56,7 @@ public class PaymentService {
                 .build();
         // to kafka -> audit , anti-fraud
 
-        return trancheService.createTranche(tranche);
+        return trancheService.saveTranche(tranche);
 
     }
 
@@ -87,8 +91,15 @@ public class PaymentService {
                 .status(TrancheStatus.PENDING)
                 .type(TrancheType.TRANSFER)
                 .build();
-        // to kafka -> audit , anti-fraud
 
-        return trancheService.createTranche(tranche);
+        //kafkaService.sendTransactionInitiatedEvent();
+        //trancheService.saveTranche(tranche);
+        // сохраняем пендинг в кафку и в постгрес , когда удачно или неудачно затираем .
+        //AntiFraudResponse response = antiFraudService.checkTransaction(tranche);
+        //kafkaService.sendTransactionCompletedEvent();
+
+        // или переделать анти фрауд в кафку тк долго ждать . тогда когда приходит сообещние о подтверждении затирать и слать в аудит.
+
+        return trancheService.saveTranche(tranche);
     }
 }
