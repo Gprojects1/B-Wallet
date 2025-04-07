@@ -1,5 +1,8 @@
 package com.example.wallet.service;
 
+import com.example.wallet.clients.dto.ConversionResponse;
+import com.example.wallet.clients.enums.ConversionType;
+import com.example.wallet.clients.exception.customException.ConversionFailedException;
 import com.example.wallet.dto.response.BalanceResponseDTO;
 import com.example.wallet.dto.response.TransactionHistoryResponseDTO;
 import com.example.wallet.exception.customException.service.WalletNotFoundException;
@@ -65,5 +68,19 @@ public class WalletService {
     @Transactional
     public void deleteWallet(Long userId) {
         walletRepository.deleteByUserId(userId);
+    }
+
+    @Transactional
+    public void commitConversion(ConversionResponse conversion) {
+        Wallet wallet = getWallet(conversion.getUserId());
+
+        if(conversion.getConversionType().equals(ConversionType.DONATION)) {
+            wallet.setBalance(wallet.getBalance().add(conversion.getConvertedAmount()));
+        }
+        else if(conversion.getConversionType().equals(ConversionType.WITHDRAWAL)) {
+            wallet.setBalance(wallet.getBalance().subtract(conversion.getConvertedAmount()));
+        }
+        // увед.
+        setWallet(wallet);
     }
 }

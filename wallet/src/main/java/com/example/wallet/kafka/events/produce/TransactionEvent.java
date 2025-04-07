@@ -1,5 +1,6 @@
 package com.example.wallet.kafka.events.produce;
 
+import com.example.wallet.model.type.TrancheStatus;
 import com.example.wallet.model.type.TrancheType;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +10,11 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class TransactionInitiatedEvent {
+public class TransactionEvent {
     Long senderId;
     Long receiverId;
     TrancheType type;
     BigDecimal amount;
-    LocalDateTime initiatedAt;
+    LocalDateTime time;
+    TrancheStatus status;
 }

@@ -15,5 +15,5 @@ public interface TrancheRepository extends JpaRepository<Tranche,Long> {
 
     List<Tranche> findByDateBetween(LocalDate startDate, LocalDate enaDate);
 
-    Optional<Tranche> findByUserIdAndTrancheId(Long userId, Long trancheId);
+    Optional<Tranche> findBySenderIdAndTrancheId(Long userId, Long trancheId);
 }

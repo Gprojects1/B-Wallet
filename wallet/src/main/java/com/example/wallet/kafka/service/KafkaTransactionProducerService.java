@@ -13,16 +13,7 @@ public class KafkaTransactionProducerService {
 
     private final String topicName = "transaction.events";
 
-    public void sendTransactionInitiatedEvent(TransactionInitiatedEvent event) {
-        kafkaTemplate.send(topicName,"initiated",event);
+    public void sendTransactionEvent(TransactionEvent event) {
+        kafkaTemplate.send(topicName,event);
     }
-
-    public void sendTransactionFailedEvent(TransactionFailedEvent event) {
-        kafkaTemplate.send(topicName,"failed",event);
-    }
-
-    public void sendTransactionCompletedEvent(TransactionCompletedEvent event) {
-        kafkaTemplate.send(topicName,"completed",event);
-    }
-
 }

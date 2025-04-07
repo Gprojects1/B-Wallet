@@ -15,20 +15,20 @@ public class ConverterController {
     private final ConverterService converterService;
 
     @PostMapping("/in")
-    public ResponseEntity<ConversionResponse> donate(@RequestBody ConversionRequest request,
+    public ResponseEntity<String> donate(@RequestBody ConversionRequest request,
                                                      @RequestHeader("X-User-Id") String userId
     ) {
         Long id = Long.parseLong(userId);
-        ConversionResponse response = converterService.processConversion(request,id);
+        String response = converterService.processConversion(request,id);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/out")
-    public ResponseEntity<ConversionResponse> withdraw(@RequestBody ConversionRequest request,
+    public ResponseEntity<String> withdraw(@RequestBody ConversionRequest request,
                                                        @RequestHeader("X-User-Id") String userId
     ) {
         Long id = Long.parseLong(userId);
-        ConversionResponse response = converterService.processConversion(request,id);
+        String response = converterService.processConversion(request,id);
         return ResponseEntity.ok(response);
     }
 }
