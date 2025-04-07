@@ -1,12 +1,21 @@
 package com.example.wallet.service;
 
-import com.example.wallet.dto.QRCodeData;
-import com.example.wallet.exception.customException.client.InvalidInteraction;
+import com.example.wallet.clients.dto.ConversionResponse;
+import com.example.wallet.clients.enums.ConversionType;
+import com.example.wallet.clients.exception.customException.ConversionFailedException;
+import com.example.wallet.dto.response.BalanceResponseDTO;
+import com.example.wallet.dto.response.TransactionHistoryResponseDTO;
+import com.example.wallet.exception.customException.service.WalletNotFoundException;
 import com.example.wallet.model.entity.Tranche;
+import com.example.wallet.model.entity.Wallet;
 import com.example.wallet.repository.sql.WalletRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,19 +23,64 @@ public class WalletService {
 
     private final WalletRepository walletRepository;
     private final TrancheService trancheService;
-    private final QRCodeService qrCodeService;
 
 
     @Transactional
-    public Tranche processQRCode(Long senderId, String qrCodeId) {
+    public BalanceResponseDTO getBalance(Long userId) {
 
-        QRCodeData qrData = qrCodeService.validateQRCode(qrCodeId);
-        if(qrData.getUserId().equals(senderId)) {
-            throw new InvalidInteraction("you cant scan your own QR!");
-        }
+        Wallet wallet = getWallet(userId);
 
-        return null;
+        return BalanceResponseDTO.builder()
+                .balance(wallet.getBalance())
+                .build();
     }
 
+    @Transactional
+    public TransactionHistoryResponseDTO getTransactionHistory(Long id, LocalDate startDate, LocalDate endDate) {
 
+        List<Tranche> tranches = trancheService.findTranchesByPeriod(startDate,endDate);
+
+        BigDecimal amount = tranches.stream()
+                .map(Tranche::getAmount)
+                .reduce(BigDecimal.ZERO,BigDecimal::add);
+
+        return TransactionHistoryResponseDTO.builder()
+                .tranches(tranches)
+                .amount(amount)
+                .build();
+    }
+
+    public Tranche getTransactionInfo(Long userId, Long trancheId) {
+        return trancheService.findTranche(userId, trancheId);
+    }
+
+    @Transactional
+    public Wallet getWallet(Long userId){
+        return walletRepository.findByUserId(userId)
+                .orElseThrow(() -> new WalletNotFoundException("wallet not found id: " + userId));
+    }
+
+    @Transactional
+    public Wallet setWallet(Wallet wallet) {
+        return walletRepository.save(wallet);
+    }
+
+    @Transactional
+    public void deleteWallet(Long userId) {
+        walletRepository.deleteByUserId(userId);
+    }
+
+    @Transactional
+    public void commitConversion(ConversionResponse conversion) {
+        Wallet wallet = getWallet(conversion.getUserId());
+
+        if(conversion.getConversionType().equals(ConversionType.DONATION)) {
+            wallet.setBalance(wallet.getBalance().add(conversion.getConvertedAmount()));
+        }
+        else if(conversion.getConversionType().equals(ConversionType.WITHDRAWAL)) {
+            wallet.setBalance(wallet.getBalance().subtract(conversion.getConvertedAmount()));
+        }
+        // увед.
+        setWallet(wallet);
+    }
 }

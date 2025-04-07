@@ -4,7 +4,6 @@ import com.example.wallet.dto.QRCodeData;
 import com.example.wallet.dto.response.QRGeneratedResponseDTO;
 import com.example.wallet.exception.customException.system.QRGenerationException;
 import com.example.wallet.exception.customException.system.QRValidationException;
-import com.example.wallet.model.type.Currency;
 import com.example.wallet.repository.redis.QRRedisRepository;
 //import com.example.wallet.repository.redis.RedisRepository;
 import com.example.wallet.service.util.QRCodeGenerator;
@@ -22,12 +21,14 @@ import java.util.UUID;
 public class QRCodeService {
 
     private final QRCodeGenerator qrCodeGenerator;
+
     private final QRRedisRepository redisRepository;
+
     private static final long QR_TTL_SEC = 300;
 
-    public QRGeneratedResponseDTO generateQRCode(Long userId, BigDecimal amount, Currency currency) {
+    public QRGeneratedResponseDTO generateQRCode(Long userId, BigDecimal amount) {
 
-        QRCodeData data = new QRCodeData(userId, amount, currency, LocalDate.now());
+        QRCodeData data = new QRCodeData(userId, amount, LocalDate.now());
         String qrCodeId = UUID.randomUUID().toString();
 
         redisRepository.save(

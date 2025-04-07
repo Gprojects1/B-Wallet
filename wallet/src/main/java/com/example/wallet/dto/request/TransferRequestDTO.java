@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 public class TransferRequestDTO {
-    private Long receiver_id;
+    private Long receiverId;
     private BigDecimal amount;
     private Currency currency;
 }

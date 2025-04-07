@@ -1,6 +1,5 @@
 package com.example.wallet.model.entity;
 
-import com.example.wallet.model.type.Currency;
 import com.example.wallet.model.type.TrancheStatus;
 import com.example.wallet.model.type.TrancheType;
 import jakarta.persistence.*;
@@ -10,6 +9,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -32,14 +32,11 @@ public class Tranche {
     private BigDecimal amount;
 
     @Column(nullable = false)
-    private Currency currency;
-
-    @Column(nullable = false)
     private TrancheStatus status;
 
     @Column(nullable = false)
     private TrancheType type;
 
     @Column(name = "created_at", nullable = false)
-    private Long createdAt;
+    private LocalDate createdAt;
 }
