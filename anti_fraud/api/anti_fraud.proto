@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package grpc;
+
+option go_package = "B-Wallet/anti_fraud/pkg/grpc";
+
+message AntiFraudRequest {
+  int64 transaction_id = 1;     
+  int64 sender_id = 2;            
+  int64 receiver_id = 3;         
+  string amount = 4;               
+}
+
+message AntiFraudResponse {
+  bool is_fraud = 1;              
+  string reason = 2;              
+  int64 tranche_id = 3;          
+}
+
+service AntiFraudService {
+  rpc CheckTransaction (AntiFraudRequest) returns (AntiFraudResponse);
+}
