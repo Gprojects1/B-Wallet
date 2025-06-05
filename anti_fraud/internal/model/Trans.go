@@ -15,7 +15,6 @@ type Transaction struct {
 	Sender      User `gorm:"foreignKey:SenderID"`
 	ReceiverID  uint
 	Receiver    User      `gorm:"foreignKey:ReceiverID"`
-	Geolocation string    `gorm:"size:255"`
 	Amount      float64   `gorm:"not null"`
 	Currency    string    `gorm:"size:3"`
 	Timestamp   time.Time `gorm:"not null"`

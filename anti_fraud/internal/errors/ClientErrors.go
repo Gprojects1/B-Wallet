@@ -9,6 +9,7 @@ var (
 	ErrAmountRequired        = NewAntiFraudError("amount is required", codes.InvalidArgument)
 	ErrHighRiskUser          = NewAntiFraudError("high risk user", codes.FailedPrecondition)
 	ErrUnusualAmount         = NewAntiFraudError("unusual transaction amount", codes.OutOfRange)
+	ErrInternal              = NewAntiFraudError("internal server error", codes.Internal)
 )
 
 type AntiFraudError struct {

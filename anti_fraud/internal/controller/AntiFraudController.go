@@ -36,5 +36,10 @@ func (c *AntiFraudController) CheckTransaction(ctx context.Context, req *pb.Anti
 		return nil, status.Error(errors.ErrAmountRequired.GRPCCode(), errors.ErrAmountRequired.Error())
 	}
 
-	return c.service.CheckTransaction(ctx, req)
+	resp, err := c.service.CheckTransaction(ctx, req)
+	if err != nil {
+		return nil, status.Error(errors.ErrInternal.GRPCCode(), err.Error())
+	}
+
+	return resp, nil
 }
