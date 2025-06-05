@@ -18,45 +18,47 @@ type RiskEngine interface {
 }
 
 type RiskEngineImpl struct {
-	db     *gorm.DB
-	config config.Limits
+	db        *gorm.DB
+	LimConfig config.Limits
+	ValConfig config.RiskValues
 }
 
-func NewRiskEngine(db *gorm.DB, cfg config.Limits) *RiskEngineImpl {
+func NewRiskEngine(db *gorm.DB, lcfg config.Limits, vcfg config.RiskValues) *RiskEngineImpl {
 	return &RiskEngineImpl{
-		db:     db,
-		config: cfg,
+		db:        db,
+		LimConfig: lcfg,
+		ValConfig: vcfg,
 	}
 }
 
 func (e *RiskEngineImpl) CalculateRiskScore(ctx context.Context, req *pb.AntiFraudRequest) (float64, error) {
 	amount, err := parseAmount(req.Amount)
 	if err != nil {
-		return 1.0, err
+		return e.ValConfig.DefaultMaxRisk, err
 	}
 
 	var sender model.User
 	if err := e.db.WithContext(ctx).First(&sender, req.SenderId).Error; err != nil {
-		return 1.0, err
+		return e.ValConfig.DefaultMaxRisk, err
 	}
 
 	if err := e.checkTransactionFrequency(ctx, req.SenderId); err != nil {
-		return 1.0, err
+		return e.ValConfig.DefaultMaxRisk, err
 	}
 
 	maxAmount := e.getMaxAmountForRiskLevel(sender.RiskLevel)
 	if amount > maxAmount {
-		return 1.0, errors.New("transaction amount exceeds limit for user's risk level")
+		return e.ValConfig.DefaultMaxRisk, errors.New("transaction amount exceeds limit for user's risk level")
 	}
 
-	riskScore := 0.0
-	if amount > maxAmount*0.8 {
-		riskScore += 0.3
+	riskScore := e.ValConfig.DefaultMinRisk
+	if amount > maxAmount*e.ValConfig.HigtAmountFactor {
+		riskScore += e.ValConfig.HigtAmountRiskFactor
 	}
 	if sender.RiskLevel == "high" {
-		riskScore += 0.4
+		riskScore += e.ValConfig.HigtRiskLevelFactor
 	} else if sender.RiskLevel == "medium" {
-		riskScore += 0.2
+		riskScore += e.ValConfig.MediumRiskLevelFactor
 	}
 
 	return riskScore, nil
@@ -65,11 +67,11 @@ func (e *RiskEngineImpl) CalculateRiskScore(ctx context.Context, req *pb.AntiFra
 func (e *RiskEngineImpl) getMaxAmountForRiskLevel(riskLevel string) float64 {
 	switch riskLevel {
 	case "high":
-		return e.config.HighRiskMaxAmountEUR
+		return e.LimConfig.HighRiskMaxAmountEUR
 	case "medium":
-		return e.config.MediumRiskMaxAmountEUR
+		return e.LimConfig.MediumRiskMaxAmountEUR
 	default:
-		return e.config.DefaultMaxAmountEUR
+		return e.LimConfig.DefaultMaxAmountEUR
 	}
 }
 
@@ -83,7 +85,7 @@ func (e *RiskEngineImpl) checkTransactionFrequency(ctx context.Context, senderID
 		return err
 	}
 
-	if count >= int64(e.config.TransactionsPerHour) {
+	if count >= int64(e.LimConfig.TransactionsPerHour) {
 		return errors.New("transaction frequency limit exceeded")
 	}
 
