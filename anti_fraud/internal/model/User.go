@@ -11,5 +11,5 @@ type User struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
-	RiskLevel string         `gorm:"risk_level"`
+	RiskLevel RiskLevel      `gorm:"risk_level"`
 }

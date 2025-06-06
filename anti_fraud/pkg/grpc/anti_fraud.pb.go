@@ -27,6 +27,7 @@ type AntiFraudRequest struct {
 	SenderId      int64                  `protobuf:"varint,2,opt,name=sender_id,json=senderId,proto3" json:"sender_id,omitempty"`
 	ReceiverId    int64                  `protobuf:"varint,3,opt,name=receiver_id,json=receiverId,proto3" json:"receiver_id,omitempty"`
 	Amount        string                 `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Currency      string                 `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -85,6 +86,13 @@ func (x *AntiFraudRequest) GetReceiverId() int64 {
 func (x *AntiFraudRequest) GetAmount() string {
 	if x != nil {
 		return x.Amount
+	}
+	return ""
+}
+
+func (x *AntiFraudRequest) GetCurrency() string {
+	if x != nil {
+		return x.Currency
 	}
 	return ""
 }
@@ -153,13 +161,14 @@ var File_anti_fraud_proto protoreflect.FileDescriptor
 
 const file_anti_fraud_proto_rawDesc = "" +
 	"\n" +
-	"\x10anti_fraud.proto\x12\x04grpc\"\x8f\x01\n" +
+	"\x10anti_fraud.proto\x12\x04grpc\"\xab\x01\n" +
 	"\x10AntiFraudRequest\x12%\n" +
 	"\x0etransaction_id\x18\x01 \x01(\x03R\rtransactionId\x12\x1b\n" +
 	"\tsender_id\x18\x02 \x01(\x03R\bsenderId\x12\x1f\n" +
 	"\vreceiver_id\x18\x03 \x01(\x03R\n" +
 	"receiverId\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\tR\x06amount\"e\n" +
+	"\x06amount\x18\x04 \x01(\tR\x06amount\x12\x1a\n" +
+	"\bcurrency\x18\x05 \x01(\tR\bcurrency\"e\n" +
 	"\x11AntiFraudResponse\x12\x19\n" +
 	"\bis_fraud\x18\x01 \x01(\bR\aisFraud\x12\x16\n" +
 	"\x06reason\x18\x02 \x01(\tR\x06reason\x12\x1d\n" +

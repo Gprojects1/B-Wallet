@@ -16,8 +16,9 @@ type Transaction struct {
 	ReceiverID  uint
 	Receiver    User      `gorm:"foreignKey:ReceiverID"`
 	Amount      float64   `gorm:"not null"`
-	Currency    string    `gorm:"size:3"`
+	AmountEUR   float64   `gorm:"not null"`
+	Currency    string    `gorm:"size:3;not null"`
 	Timestamp   time.Time `gorm:"not null"`
 	Description string    `gorm:"size:255"`
-	IsFraud     bool      `gorm:"fraud"`
+	IsFraud     bool      `gorm:"default:false"`
 }

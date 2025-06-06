@@ -8,7 +8,8 @@ import (
 
 type ExchangeRate struct {
 	gorm.Model
-	CurrencyPair string  `gorm:"size:10;uniqueIndex"`
-	Rate         float64 `gorm:"not null"`
-	LastUpdated  time.Time
+	BaseCurrency  string    `gorm:"size:10;index:idx_base_quote,unique"`
+	QuoteCurrency string    `gorm:"size:10;index:idx_base_quote,unique"`
+	Rate          float64   `gorm:"not null"`
+	LastUpdated   time.Time `gorm:"not null"`
 }
