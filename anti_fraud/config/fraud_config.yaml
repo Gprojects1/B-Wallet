@@ -1,0 +1,16 @@
+limit_config:
+  name: "default"
+  default_max_amount_eur: 100.0
+  high_risk_max_amount_eur: 50.0
+  medium_risk_max_amount_eur: 75.0
+  transactions_per_hour: 10
+
+risk_config:
+  name: "default"
+  default_max_risk: 1.0
+  default_min_risk: 0.0
+  high_amount_factor: 0.8
+  high_amount_risk_factor: 0.3
+  high_risk_level_factor: 0.4
+  medium_risk_level_factor: 0.2
+  max_risk_score: 0.7
