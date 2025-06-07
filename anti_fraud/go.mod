@@ -13,4 +13,7 @@ require (
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/gorm v1.30.0 // indirect
+	github.com/Gprojects1/B-wallet-common-proto v0.1.0
 )
+
+replace github.com/Gprojects1/B-wallet-common-proto => ./proto
