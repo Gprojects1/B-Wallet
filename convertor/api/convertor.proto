@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package converter;
+
+option go_package = ".;converter";
+
+import "google/protobuf/timestamp.proto";
+
+enum CryptoCurrency {
+  BTC = 0;
+  ETH = 1;
+  USDT = 2;
+  BNB = 3;
+  SOL = 4;
+  XRP = 5;
+  ADA = 6;
+  DOGE = 7;
+  DOT = 8;
+  MATIC = 9;
+}
+
+enum ConversionType {
+  WITHDRAWAL = 0;
+  DONATION = 1;
+}
+
+enum ConversionStatus {
+  PENDING = 0;
+  COMPLETED = 1;
+  FAILED = 2;
+  REJECTED = 3;
+}
+
+message ConversionRequest {
+  int64 user_id = 1;
+  string source_amount = 2;
+  CryptoCurrency currency = 3;
+  ConversionType conversion_type = 4;
+}
+
+message ConversionResponse {
+  int64 user_id = 1;
+  ConversionType conversion_type = 2;
+  string converted_amount = 3;
+  int64 conversion_id = 4;
+  ConversionStatus status = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+service ConverterService {
+  rpc Convert (ConversionRequest) returns (ConversionResponse);
+  rpc GetConversionStatus (ConversionStatusRequest) returns (ConversionResponse);
+}
+
+message ConversionStatusRequest {
+  int64 conversion_id = 1;
+}
